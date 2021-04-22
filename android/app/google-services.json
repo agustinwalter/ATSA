@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "412090342809",
+    "project_id": "atsa-santa-cruz",
+    "storage_bucket": "atsa-santa-cruz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:412090342809:android:5c53785864861247e3c708",
+        "android_client_info": {
+          "package_name": "com.esplim.atsa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "412090342809-6s6baqnslc0dlgko4nspetpcef5neav9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUwfMNnYtQHed--i--b7jZhv6kv0xTZ60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "412090342809-6s6baqnslc0dlgko4nspetpcef5neav9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
