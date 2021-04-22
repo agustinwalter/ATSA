@@ -17,10 +17,12 @@ class PrimaryButton extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(
-          child: RaisedButton(
-            textColor: Colors.white,
-            color: Colors.blue,
-            padding: const EdgeInsets.symmetric(vertical: 10),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.blue,
+              onPrimary: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+            ),
             onPressed: onPressed,
             child: loading
                 ? Center(

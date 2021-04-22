@@ -47,10 +47,10 @@ class ValidatingCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 18),
-          FlatButton(
+          TextButton(
             onPressed: () => _logout(context),
             child: Text('Cerrar sesión'),
-            textColor: Colors.blue,
+            style: TextButton.styleFrom(primary: Colors.blue),
           ),
         ],
       ),

@@ -15,14 +15,16 @@ class SecondaryButton extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(
-          child: RaisedButton(
-            color: Colors.white,
-            textColor: Colors.blue,
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            onPressed: onPressed,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: Colors.blue),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.white,
+              onPrimary: Colors.blue,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Colors.blue),
+              ),
             ),
+            onPressed: onPressed,
             child: Text(
               text,
               style: TextStyle(fontSize: 18),
