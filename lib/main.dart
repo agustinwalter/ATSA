@@ -30,7 +30,6 @@ class _ATSAState extends State<ATSA> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ATSA Santa Cruz',
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
