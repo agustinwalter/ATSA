@@ -3,23 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CredentialScreen extends StatelessWidget {
+  const CredentialScreen({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Credencial ATSA'),
+        title: const Text('Credencial ATSA'),
         centerTitle: true,
       ),
       body: Consumer<UserProvider>(
         builder: (BuildContext _, UserProvider userProvider, Widget __) {
           if (userProvider.atsaUser.status == 'Afiliado') {
             return Column(
-              children: [
+              children: <Widget>[
                 Card(
                   elevation: 4,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   clipBehavior: Clip.antiAlias,
-                  margin: EdgeInsets.fromLTRB(20, 40, 20, 20),
+                  margin: const EdgeInsets.fromLTRB(20, 40, 20, 20),
                   child: SizedBox(
                     width: double.infinity,
                     child: Stack(
@@ -59,7 +61,7 @@ class CredentialScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(
+                              const Text(
                                 'Usuario',
                                 style: TextStyle(fontSize: 16),
                               ),
@@ -68,7 +70,7 @@ class CredentialScreen extends StatelessWidget {
                                     .atsaUser
                                     .status
                                     .toUpperCase(),
-                                style: TextStyle(fontSize: 24),
+                                style: const TextStyle(fontSize: 24),
                               ),
                             ],
                           ),
@@ -81,7 +83,7 @@ class CredentialScreen extends StatelessWidget {
                   elevation: 4,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   clipBehavior: Clip.antiAlias,
-                  margin: EdgeInsets.all(20),
+                  margin: const EdgeInsets.all(20),
                   child: SizedBox(
                     width: double.infinity,
                     child: Stack(
@@ -121,13 +123,13 @@ class CredentialScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(
+                              const Text(
                                 'Número de DNI',
                                 style: TextStyle(fontSize: 16),
                               ),
                               Text(
                                 Provider.of<UserProvider>(context, listen: false).atsaUser.dni,
-                                style: TextStyle(fontSize: 24),
+                                style: const TextStyle(fontSize: 24),
                               ),
                             ],
                           ),
@@ -139,19 +141,20 @@ class CredentialScreen extends StatelessWidget {
                 Card(
                   elevation: 4,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  margin: EdgeInsets.all(20),
+                  margin: const EdgeInsets.all(20),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(Icons.info_outline_rounded, color: Colors.blue),
-                        SizedBox(width: 16),
+                      children: <Widget>[
+                        const Icon(Icons.info_outline_rounded, color: Colors.blue),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: Column(
-                            children: [
+                            children: const <Widget>[
                               Text(
-                                  'Compruebe que la credencial sea válida, verificando que la siguente linea se encuentre en movimiento:'),
+                                'Compruebe que la credencial sea válida, verificando que la siguente linea se encuentre en movimiento:',
+                              ),
                               SizedBox(height: 16),
                               LinearProgressIndicator(
                                 backgroundColor: Colors.white,
@@ -172,7 +175,7 @@ class CredentialScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
               ],
             );
           } else {
@@ -187,19 +190,17 @@ class CredentialScreen extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: const <Widget>[
           Icon(
             Icons.info_outline_rounded,
             color: Colors.orangeAccent,
             size: 100,
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 16, bottom: 20),
+            padding: EdgeInsets.only(top: 16, bottom: 20),
             child: Text(
               'Credencial Inválida',
-              style: TextStyle(
-                fontSize: 24,
-              ),
+              style: TextStyle(fontSize: 24),
             ),
           ),
           Text('Por algún motivo, esta credencial fue desactivada.')

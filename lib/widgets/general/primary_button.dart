@@ -25,7 +25,7 @@ class PrimaryButton extends StatelessWidget {
             ),
             onPressed: onPressed,
             child: loading
-                ? Center(
+                ? const Center(
                     child: SizedBox(
                       height: 19,
                       width: 19,
@@ -35,7 +35,7 @@ class PrimaryButton extends StatelessWidget {
                       ),
                     ),
                   )
-                : Text(text, style: TextStyle(fontSize: 18)),
+                : Text(text, style: const TextStyle(fontSize: 18)),
           ),
         ),
       ],

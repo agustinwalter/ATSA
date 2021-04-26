@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ValidatingCard extends StatelessWidget {
-  final String email;
-
   const ValidatingCard({Key key, @required this.email}) : super(key: key);
+
+  final String email;
 
   Future<void> _logout(BuildContext context) async {
     await Provider.of<UserProvider>(context, listen: false).logout();
@@ -28,28 +28,28 @@ class ValidatingCard extends StatelessWidget {
           const SizedBox(height: 28),
           RichText(
             text: TextSpan(
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 15,
                 color: Colors.black87,
                 height: 1.3,
               ),
               children: <TextSpan>[
-                TextSpan(
+                const TextSpan(
                   text:
                       'Estamos verificando que seas afiliado de ATSA Santa Cruz, en los próximos días recibirás un correo en tu cuenta ',
                 ),
                 TextSpan(
                   text: email,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                TextSpan(text: '.'),
+                const TextSpan(text: '.'),
               ],
             ),
           ),
           const SizedBox(height: 18),
           TextButton(
             onPressed: () => _logout(context),
-            child: Text('Cerrar sesión'),
+            child: const Text('Cerrar sesión'),
             style: TextButton.styleFrom(primary: Colors.blue),
           ),
         ],

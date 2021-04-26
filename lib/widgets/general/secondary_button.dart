@@ -20,15 +20,12 @@ class SecondaryButton extends StatelessWidget {
               primary: Colors.white,
               onPrimary: Colors.blue,
               padding: const EdgeInsets.symmetric(vertical: 10),
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                 side: BorderSide(color: Colors.blue),
               ),
             ),
             onPressed: onPressed,
-            child: Text(
-              text,
-              style: TextStyle(fontSize: 18),
-            ),
+            child: Text(text, style: const TextStyle(fontSize: 18)),
           ),
         ),
       ],

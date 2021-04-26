@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class NotAffiliatedCard extends StatelessWidget {
+  const NotAffiliatedCard({Key key}) : super(key: key);
+
   Future<void> _logout(BuildContext context) async {
     await Provider.of<UserProvider>(context, listen: false).logout();
   }
@@ -16,23 +18,17 @@ class NotAffiliatedCard extends StatelessWidget {
           const Text(
             'Usuario no afiliado',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w400,
-            ),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
           ),
           const SizedBox(height: 28),
-          Text(
+          const Text(
             'No sos afiliado de ATSA Santa Cruz por lo que no podés acceder a los descuentos que ofrecemos.',
-            style: TextStyle(
-              fontSize: 15,
-              height: 1.3,
-            ),
+            style: TextStyle(fontSize: 15, height: 1.3),
           ),
           const SizedBox(height: 18),
           TextButton(
             onPressed: () => _logout(context),
-            child: Text('Cerrar sesión'),
+            child: const Text('Cerrar sesión'),
             style: TextButton.styleFrom(primary: Colors.blue),
           ),
         ],

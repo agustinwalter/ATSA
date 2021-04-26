@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class DNICard extends StatefulWidget {
+  const DNICard({Key key}) : super(key: key);
+
   @override
   _DNICardState createState() => _DNICardState();
 }
@@ -37,18 +39,12 @@ class _DNICardState extends State<DNICard> {
           const Text(
             'ATSA Santa Cruz',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w400,
-            ),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
           ),
           const SizedBox(height: 28),
-          Text(
+          const Text(
             'Ingresá tu número de DNI para acceder a la app:',
-            style: TextStyle(
-              fontSize: 15,
-              height: 1.3,
-            ),
+            style: TextStyle(fontSize: 15, height: 1.3),
           ),
           const SizedBox(height: 16),
           CustomTextField(

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EmailCard extends StatefulWidget {
+  const EmailCard({Key key}) : super(key: key);
+
   @override
   _EmailCardState createState() => _EmailCardState();
 }
@@ -38,18 +40,12 @@ class _EmailCardState extends State<EmailCard> {
           const Text(
             'ATSA Santa Cruz',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w400,
-            ),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
           ),
           const SizedBox(height: 28),
-          Text(
+          const Text(
             'Ahora ingresá tu email, revisaremos si sos afiliado y te notificaremos por correo electrónico:',
-            style: TextStyle(
-              fontSize: 15,
-              height: 1.3,
-            ),
+            style: TextStyle(fontSize: 15, height: 1.3),
           ),
           const SizedBox(height: 16),
           CustomTextField(
@@ -62,11 +58,7 @@ class _EmailCardState extends State<EmailCard> {
             onEditingComplete: _addEmail,
           ),
           const SizedBox(height: 16),
-          PrimaryButton(
-            onPressed: _addEmail,
-            text: 'Enviar',
-            loading: _loading,
-          ),
+          PrimaryButton(onPressed: _addEmail, text: 'Enviar', loading: _loading),
           const SizedBox(height: 20),
         ],
       ),

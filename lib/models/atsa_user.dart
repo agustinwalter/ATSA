@@ -2,12 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class AtsaUser {
-  final String email;
-  final String dni;
-  final String status;
-  final Timestamp createdAt;
-  final String docId;
-
   AtsaUser({
     @required this.email,
     @required this.dni,
@@ -22,6 +16,12 @@ class AtsaUser {
         status = json['status'] as String,
         createdAt = json['createdAt'] as Timestamp,
         docId = json['docId'] as String;
+
+  final String email;
+  final String dni;
+  final String status;
+  final Timestamp createdAt;
+  final String docId;
 
   AtsaUser copyWith({
     String email,

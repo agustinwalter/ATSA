@@ -1,4 +1,4 @@
-import 'package:atsa/models/AtsaUser.dart';
+import 'package:atsa/models/atsa_user.dart';
 import 'package:atsa/provider/user_provider.dart';
 import 'package:atsa/widgets/login_process_screen/dni_card.dart';
 import 'package:atsa/widgets/login_process_screen/email_card.dart';
@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginProcessScreen extends StatelessWidget {
+  const LoginProcessScreen({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,21 +34,21 @@ class LoginProcessScreen extends StatelessWidget {
                     elevation: 4,
                     child: Consumer<UserProvider>(
                       builder: (BuildContext _, UserProvider userProvider, Widget __) {
-                        AtsaUser user = userProvider.atsaUser;
+                        final AtsaUser user = userProvider.atsaUser;
                         if (user == null) {
-                          return DNICard();
+                          return const DNICard();
                         }
                         switch (user.status) {
                           case 'Verificación pendiente':
                             return ValidatingCard(email: user.email);
                           case 'No afiliado':
-                            return NotAffiliatedCard();
+                            return const NotAffiliatedCard();
                           case 'Bloqueado':
-                            return UserBlocked();
+                            return const UserBlocked();
                           case 'Falta email':
-                            return EmailCard();
+                            return const EmailCard();
                           default:
-                            return SizedBox.shrink();
+                            return const SizedBox.shrink();
                         }
                       },
                     ),

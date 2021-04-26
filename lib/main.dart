@@ -13,12 +13,14 @@ void main() {
       providers: <SingleChildWidget>[
         ChangeNotifierProvider<UserProvider>(create: (BuildContext _) => UserProvider()),
       ],
-      child: ATSA(),
+      child: const ATSA(),
     ),
   );
 }
 
 class ATSA extends StatefulWidget {
+  const ATSA({Key key}) : super(key: key);
+
   @override
   _ATSAState createState() => _ATSAState();
 }
@@ -34,12 +36,12 @@ class _ATSAState extends State<ATSA> {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: FutureBuilder(
+      home: FutureBuilder<void>(
         future: _initialization,
-        builder: (context, snapshot) {
+        builder: (_, AsyncSnapshot<void> snapshot) {
           // Error.
           if (snapshot.hasError) {
-            return Scaffold(
+            return const Scaffold(
               body: Center(
                 child: Text('Algo salió mal'),
               ),
@@ -51,15 +53,15 @@ class _ATSAState extends State<ATSA> {
               builder: (BuildContext _, UserProvider userProvider, Widget __) {
                 if (userProvider.atsaUser != null) {
                   if (userProvider.atsaUser.status == 'Afiliado') {
-                    return BusinessScreen();
+                    return const BusinessScreen();
                   }
                 }
-                return LoginProcessScreen();
+                return const LoginProcessScreen();
               },
             );
           }
           // Loading.
-          return Scaffold(body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
         },
       ),
     );
