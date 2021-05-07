@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:atsa/helpers/login_status.dart';
 import 'package:atsa/models/atsa_user.dart';
 import 'package:atsa/models/business.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,6 +9,7 @@ class UserProvider extends ChangeNotifier {
   AtsaUser atsaUser;
   List<Business> business = <Business>[];
   bool loading = false;
+  LoginStatus loginStatus = LoginStatus.BLOCKED;
 
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   StreamSubscription<QuerySnapshot> _listenUser;

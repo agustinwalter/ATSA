@@ -1,38 +1,25 @@
-import 'package:atsa/provider/user_provider.dart';
+import 'package:atsa/widgets/general/primary_button.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
+import 'card_components.dart';
 
 class NotAffiliatedCard extends StatelessWidget {
   const NotAffiliatedCard({Key key}) : super(key: key);
-
-  Future<void> _logout(BuildContext context) async {
-    await Provider.of<UserProvider>(context, listen: false).logout();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 28, 24, 10),
-      child: Column(
-        children: <Widget>[
-          const Text(
-            'Usuario no afiliado',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
-          ),
-          const SizedBox(height: 28),
-          const Text(
-            'No sos afiliado de ATSA Santa Cruz por lo que no podés acceder a los descuentos que ofrecemos.',
-            style: TextStyle(fontSize: 15, height: 1.3),
-          ),
-          const SizedBox(height: 18),
-          TextButton(
-            onPressed: () => _logout(context),
-            child: const Text('Cerrar sesión'),
-            style: TextButton.styleFrom(primary: Colors.blue),
-          ),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        const TitleCard(title: 'Aún no estás afiliado'),
+        const SizedBox(height: 16),
+        const MessageCard(
+            message:
+                'Aún no sos afiliado de ATSA Santa Cruz. No te preocupes, podés afiliarte ahora mismo desde la app.'),
+        const SizedBox(height: 8),
+        PrimaryButton(onPressed: () {}, text: 'Afiliarme'),
+        const SizedBox(height: 8),
+        TextButton(onPressed: () {}, child: const Text('Cerrar sesión')),
+      ],
     );
   }
 }

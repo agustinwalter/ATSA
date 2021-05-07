@@ -1,3 +1,4 @@
+import 'package:atsa/helpers/login_status.dart';
 import 'package:atsa/provider/user_provider.dart';
 import 'package:atsa/screens/business_screen.dart';
 import 'package:atsa/screens/login_process_screen.dart';
@@ -41,20 +42,14 @@ class _ATSAState extends State<ATSA> {
         builder: (_, AsyncSnapshot<void> snapshot) {
           // Error.
           if (snapshot.hasError) {
-            return const Scaffold(
-              body: Center(
-                child: Text('Algo salió mal'),
-              ),
-            );
+            return const Scaffold(body: Center(child: Text('Algo salió mal')));
           }
           // Login or business.
           if (snapshot.connectionState == ConnectionState.done) {
             return Consumer<UserProvider>(
               builder: (BuildContext _, UserProvider userProvider, Widget __) {
-                if (userProvider.atsaUser != null) {
-                  if (userProvider.atsaUser.status == 'Afiliado') {
-                    return const BusinessScreen();
-                  }
+                if (userProvider.loginStatus == LoginStatus.AFFILIATED) {
+                  return const BusinessScreen();
                 }
                 return const LoginProcessScreen();
               },
