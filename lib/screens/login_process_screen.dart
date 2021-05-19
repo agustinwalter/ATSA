@@ -1,5 +1,6 @@
 import 'package:atsa/helpers/login_status.dart';
 import 'package:atsa/provider/user_provider.dart';
+import 'package:atsa/widgets/general/wsp_button.dart';
 import 'package:atsa/widgets/login_process_screen/email_not_verified_card.dart';
 import 'package:atsa/widgets/login_process_screen/form_pending_card.dart';
 import 'package:atsa/widgets/login_process_screen/not_affiliated_card.dart';
@@ -19,6 +20,8 @@ class LoginProcessScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButton: const WspButton(),
       body: Center(
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 16),
