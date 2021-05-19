@@ -1,3 +1,4 @@
+import 'package:atsa/helpers/login_status.dart';
 import 'package:atsa/provider/user_provider.dart';
 import 'package:atsa/screens/business_screen.dart';
 import 'package:atsa/screens/login_process_screen.dart';
@@ -13,54 +14,51 @@ void main() {
       providers: <SingleChildWidget>[
         ChangeNotifierProvider<UserProvider>(create: (BuildContext _) => UserProvider()),
       ],
-      child: ATSA(),
+      child: const ATSA(),
     ),
   );
 }
 
 class ATSA extends StatefulWidget {
+  const ATSA({Key key}) : super(key: key);
   @override
   _ATSAState createState() => _ATSAState();
 }
 
 class _ATSAState extends State<ATSA> {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  Future<void> _init() async {
+    await Firebase.initializeApp();
+    await Provider.of<UserProvider>(context, listen: false).initUser();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ATSA Santa Cruz',
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: FutureBuilder(
-        future: _initialization,
-        builder: (context, snapshot) {
+      home: FutureBuilder<void>(
+        future: _init(),
+        builder: (_, AsyncSnapshot<void> snapshot) {
           // Error.
           if (snapshot.hasError) {
-            return Scaffold(
-              body: Center(
-                child: Text('Algo salió mal'),
-              ),
-            );
+            return const Scaffold(body: Center(child: Text('Algo salió mal')));
           }
           // Login or business.
           if (snapshot.connectionState == ConnectionState.done) {
             return Consumer<UserProvider>(
               builder: (BuildContext _, UserProvider userProvider, Widget __) {
-                if (userProvider.atsaUser != null) {
-                  if (userProvider.atsaUser.status == 'Afiliado') {
-                    return BusinessScreen();
-                  }
+                if (userProvider.user.status == LoginStatus.AFFILIATED) {
+                  return const BusinessScreen();
                 }
-                return LoginProcessScreen();
+                return const LoginProcessScreen();
               },
             );
           }
           // Loading.
-          return Scaffold(body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
         },
       ),
     );

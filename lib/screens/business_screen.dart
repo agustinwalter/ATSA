@@ -1,4 +1,4 @@
-import 'package:atsa/models/Business.dart';
+import 'package:atsa/models/business.dart';
 import 'package:atsa/provider/user_provider.dart';
 import 'package:atsa/screens/details_screen.dart';
 import 'package:flutter/material.dart';
@@ -6,50 +6,66 @@ import 'package:provider/provider.dart';
 import 'credential_screen.dart';
 
 class BusinessScreen extends StatelessWidget {
+  const BusinessScreen({Key key}) : super(key: key);
+
+  Future<void> _signOut(BuildContext context) async {
+    await Provider.of<UserProvider>(context, listen: false).signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Descuentos para vos',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w300,
+            color: Colors.black87,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.exit_to_app_outlined),
+            onPressed: () => _signOut(context),
+            color: Colors.black54,
+          )
+        ],
+      ),
       body: SafeArea(
         child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
-              child: Text(
-                'Descuentos para vos',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
-              ),
-            ),
-            FutureBuilder(
+          padding: const EdgeInsets.only(bottom: 60, top: 10),
+          children: <Widget>[
+            FutureBuilder<void>(
               future: Provider.of<UserProvider>(context, listen: false).getBusiness(),
-              builder: (context, snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   return Consumer<UserProvider>(
                     builder: (BuildContext _, UserProvider userProvider, Widget __) {
                       return Column(
-                        children: userProvider.business.map((business) {
-                          return _card(
-                            business: business,
-                            context: context,
-                          );
+                        children: userProvider.business.map((Business business) {
+                          return _card(business: business, context: context);
                         }).toList(),
                       );
                     },
                   );
                 }
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               },
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.push(
+        onPressed: () => Navigator.push<void>(
           context,
-          MaterialPageRoute(
-            builder: (context) => CredentialScreen(),
+          MaterialPageRoute<void>(
+            builder: (_) => const CredentialScreen(),
           ),
         ),
-        label: Text('Ver mi credencial'),
+        label: const Text('Ver mi credencial'),
       ),
     );
   }
@@ -60,18 +76,18 @@ class BusinessScreen extends StatelessWidget {
   }) {
     return Card(
       elevation: 4,
-      margin: EdgeInsets.fromLTRB(16, 0, 16, 20),
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 20),
       child: InkWell(
-        onTap: () => Navigator.push(
+        onTap: () => Navigator.push<void>(
           context,
-          MaterialPageRoute(
-            builder: (context) => DetailsScreen(business: business),
+          MaterialPageRoute<void>(
+            builder: (_) => DetailsScreen(business: business),
           ),
         ),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
-            children: [
+            children: <Widget>[
               CircleAvatar(
                 radius: 31,
                 backgroundColor: Colors.blue,
@@ -80,25 +96,25 @@ class BusinessScreen extends StatelessWidget {
                   backgroundImage: NetworkImage(business.image),
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     Text(
                       business.name,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 4, top: 3),
                       child: Text(
                         business.type,
-                        style: TextStyle(color: Colors.black54),
+                        style: const TextStyle(color: Colors.black54),
                       ),
                     ),
                     Row(
-                      children: [
-                        Icon(
+                      children: <Widget>[
+                        const Icon(
                           Icons.location_on_outlined,
                           size: 15,
                           color: Colors.black45,
@@ -107,7 +123,7 @@ class BusinessScreen extends StatelessWidget {
                           child: Text(
                             business.address,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: Colors.black45),
+                            style: const TextStyle(color: Colors.black45),
                           ),
                         ),
                       ],
@@ -116,13 +132,19 @@ class BusinessScreen extends StatelessWidget {
                 ),
               ),
               Column(
-                children: [
-                  Text('Hasta', style: TextStyle(letterSpacing: 2, color: Colors.grey)),
-                  Text(business.discount, style: TextStyle(fontSize: 26)),
-                  Text('OFF', style: TextStyle(letterSpacing: 2, color: Colors.grey)),
+                children: <Widget>[
+                  const Text(
+                    'Hasta',
+                    style: TextStyle(letterSpacing: 2, color: Colors.grey),
+                  ),
+                  Text(business.discount, style: const TextStyle(fontSize: 26)),
+                  const Text(
+                    'OFF',
+                    style: TextStyle(letterSpacing: 2, color: Colors.grey),
+                  ),
                 ],
               ),
-              Icon(Icons.navigate_next, color: Colors.blue)
+              const Icon(Icons.navigate_next, color: Colors.blue)
             ],
           ),
         ),
