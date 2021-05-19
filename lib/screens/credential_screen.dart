@@ -1,3 +1,4 @@
+import 'package:atsa/helpers/login_status.dart';
 import 'package:atsa/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,7 @@ class CredentialScreen extends StatelessWidget {
       ),
       body: Consumer<UserProvider>(
         builder: (BuildContext _, UserProvider userProvider, Widget __) {
-          if (userProvider.atsaUser.status == 'Afiliado') {
+          if (userProvider.user.status == LoginStatus.AFFILIATED) {
             return Column(
               children: <Widget>[
                 Card(
@@ -66,10 +67,11 @@ class CredentialScreen extends StatelessWidget {
                                 style: TextStyle(fontSize: 16),
                               ),
                               Text(
-                                Provider.of<UserProvider>(context, listen: false)
-                                    .atsaUser
-                                    .status
-                                    .toUpperCase(),
+                                '',
+                                // Provider.of<UserProvider>(context, listen: false)
+                                //     .user
+                                //     .status
+                                //     .toUpperCase(),
                                 style: const TextStyle(fontSize: 24),
                               ),
                             ],
@@ -128,7 +130,7 @@ class CredentialScreen extends StatelessWidget {
                                 style: TextStyle(fontSize: 16),
                               ),
                               Text(
-                                Provider.of<UserProvider>(context, listen: false).atsaUser.dni,
+                                Provider.of<UserProvider>(context, listen: false).user.dni,
                                 style: const TextStyle(fontSize: 24),
                               ),
                             ],

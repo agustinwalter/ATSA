@@ -40,7 +40,7 @@ class LoginProcessScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(24),
                       child: Consumer<UserProvider>(
                         builder: (_, UserProvider userProvider, __) {
-                          switch (userProvider.loginStatus) {
+                          switch (userProvider.user.status) {
                             case LoginStatus.NOT_LOGGED:
                               return const WelcomeCard();
                             case LoginStatus.EMAIL_ENTERED_NOT_USER:
@@ -49,7 +49,7 @@ class LoginProcessScreen extends StatelessWidget {
                               return const SignInCard();
                             case LoginStatus.EMAIL_NOT_VERIFIED:
                               return const EmailNotVerified();
-                            case LoginStatus.EMAIL_VERIFIED:
+                            case LoginStatus.SEND_USER_DATA:
                               return const UpdateInfoCard();
                             case LoginStatus.PENDING_VERIFICATION:
                               return const PendingVerificationCard();
@@ -57,10 +57,6 @@ class LoginProcessScreen extends StatelessWidget {
                               return const UserBlockedCard();
                             case LoginStatus.NOT_AFFILIATED:
                               return const NotAffiliatedCard();
-                            case LoginStatus.AFFILIATED:
-                              return const SizedBox.shrink();
-                            case LoginStatus.AFFILIATION_FORM:
-                              return const SizedBox.shrink();
                             case LoginStatus.AFFILIATION_FORM_PENDING:
                               return const FormPendingCard();
                             default:

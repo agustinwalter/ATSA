@@ -21,13 +21,15 @@ void main() {
 
 class ATSA extends StatefulWidget {
   const ATSA({Key key}) : super(key: key);
-
   @override
   _ATSAState createState() => _ATSAState();
 }
 
 class _ATSAState extends State<ATSA> {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  Future<void> _init() async {
+    await Firebase.initializeApp();
+    await Provider.of<UserProvider>(context, listen: false).initUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class _ATSAState extends State<ATSA> {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: FutureBuilder<void>(
-        future: _initialization,
+        future: _init(),
         builder: (_, AsyncSnapshot<void> snapshot) {
           // Error.
           if (snapshot.hasError) {
@@ -48,7 +50,7 @@ class _ATSAState extends State<ATSA> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Consumer<UserProvider>(
               builder: (BuildContext _, UserProvider userProvider, Widget __) {
-                if (userProvider.loginStatus == LoginStatus.AFFILIATED) {
+                if (userProvider.user.status == LoginStatus.AFFILIATED) {
                   return const BusinessScreen();
                 }
                 return const LoginProcessScreen();

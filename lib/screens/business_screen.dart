@@ -8,20 +8,36 @@ import 'credential_screen.dart';
 class BusinessScreen extends StatelessWidget {
   const BusinessScreen({Key key}) : super(key: key);
 
+  Future<void> _signOut(BuildContext context) async {
+    await Provider.of<UserProvider>(context, listen: false).signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Descuentos para vos',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w300,
+            color: Colors.black87,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.exit_to_app_outlined),
+            onPressed: () => _signOut(context),
+            color: Colors.black54,
+          )
+        ],
+      ),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.only(bottom: 60),
+          padding: const EdgeInsets.only(bottom: 60, top: 10),
           children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20, 24, 20, 24),
-              child: Text(
-                'Descuentos para vos',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
-              ),
-            ),
             FutureBuilder<void>(
               future: Provider.of<UserProvider>(context, listen: false).getBusiness(),
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
@@ -30,10 +46,7 @@ class BusinessScreen extends StatelessWidget {
                     builder: (BuildContext _, UserProvider userProvider, Widget __) {
                       return Column(
                         children: userProvider.business.map((Business business) {
-                          return _card(
-                            business: business,
-                            context: context,
-                          );
+                          return _card(business: business, context: context);
                         }).toList(),
                       );
                     },

@@ -1,8 +1,14 @@
+import 'package:atsa/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'card_components.dart';
 
 class PendingVerificationCard extends StatelessWidget {
   const PendingVerificationCard({Key key}) : super(key: key);
+
+  Future<void> _signOut(BuildContext context) async {
+    await Provider.of<UserProvider>(context, listen: false).signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +21,10 @@ class PendingVerificationCard extends StatelessWidget {
             message:
                 'Estamos verificando que seas afiliado de ATSA Santa Cruz, este proceso puede demorar unos días.'),
         const SizedBox(height: 8),
-        TextButton(onPressed: () {}, child: const Text('Cerrar sesión')),
+        TextButton(
+          onPressed: () => _signOut(context),
+          child: const Text('Cerrar sesión'),
+        ),
       ],
     );
   }
