@@ -1,4 +1,5 @@
 import 'package:atsa/helpers/login_status.dart';
+import 'package:atsa/provider/form_provider.dart';
 import 'package:atsa/provider/user_provider.dart';
 import 'package:atsa/screens/business_screen.dart';
 import 'package:atsa/screens/login_process_screen.dart';
@@ -13,6 +14,7 @@ void main() {
     MultiProvider(
       providers: <SingleChildWidget>[
         ChangeNotifierProvider<UserProvider>(create: (BuildContext _) => UserProvider()),
+        ChangeNotifierProvider<FormProvider>(create: (BuildContext _) => FormProvider()),
       ],
       child: const ATSA(),
     ),
