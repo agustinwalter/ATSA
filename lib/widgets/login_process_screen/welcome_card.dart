@@ -1,5 +1,6 @@
 import 'package:atsa/helpers/show_toast.dart';
 import 'package:atsa/provider/user_provider.dart';
+import 'package:atsa/screens/affiliation_form_screen.dart';
 import 'package:atsa/widgets/general/custom_text_field.dart';
 import 'package:atsa/widgets/general/primary_button.dart';
 import 'package:atsa/widgets/general/secondary_button.dart';
@@ -44,6 +45,15 @@ class _WelcomeCardState extends State<WelcomeCard> {
     }
   }
 
+  void _goToAffiliationForm() {
+    Navigator.push<void>(
+      context,
+      MaterialPageRoute<void>(
+        builder: (_) => const AffiliationFormScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -72,7 +82,7 @@ class _WelcomeCardState extends State<WelcomeCard> {
         const SizedBox(height: 24),
         const MessageCard(message: '¿Todavía no te afiliaste?'),
         const SizedBox(height: 8),
-        SecondaryButton(onPressed: () {}, text: 'Afiliarme'),
+        SecondaryButton(onPressed: _goToAffiliationForm, text: 'Afiliarme'),
       ],
     );
   }
