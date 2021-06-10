@@ -45,14 +45,8 @@ class _WelcomeCardState extends State<WelcomeCard> {
     }
   }
 
-  void _goToAffiliationForm() {
-    Navigator.push<void>(
-      context,
-      MaterialPageRoute<void>(
-        builder: (_) => const AffiliationFormScreen(),
-      ),
-    );
-  }
+  void _goToCreateAccount() =>
+      Provider.of<UserProvider>(context, listen: false).goToCreateAccount();
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +76,7 @@ class _WelcomeCardState extends State<WelcomeCard> {
         const SizedBox(height: 24),
         const MessageCard(message: '¿Todavía no te afiliaste?'),
         const SizedBox(height: 8),
-        SecondaryButton(onPressed: _goToAffiliationForm, text: 'Afiliarme'),
+        SecondaryButton(onPressed: _goToCreateAccount, text: 'Afiliarme'),
       ],
     );
   }

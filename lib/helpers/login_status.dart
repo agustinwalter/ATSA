@@ -51,5 +51,10 @@ enum LoginStatus {
   /// The user has submitted the affiliation form, an administrator is reviewing it.
   /// A message should be displayed informing the status of his affiliation.
   /// This value is saved in the database.
-  AFFILIATION_FORM_PENDING
+  AFFILIATION_FORM_PENDING,
+
+  /// The user has clicked in the welcome affiliation button.
+  /// A form to create account should be displayed.
+  /// This value is not saved in the database.
+  CREATE_ACCOUNT_FOR_AFFILIATION
 }
