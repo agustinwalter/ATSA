@@ -1,5 +1,6 @@
 import 'package:atsa/models/atsa_form.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class FormProvider extends ChangeNotifier {
@@ -9,9 +10,9 @@ class FormProvider extends ChangeNotifier {
   int formStep = 0;
 
   void setPersonalData({
-    @required String name,
-    @required String surname,
-    @required int dni,
+    // @required String name,
+    // @required String surname,
+    // @required int dni,
     @required String email,
     @required int personalPhone,
     @required String personalAddress,
@@ -19,9 +20,9 @@ class FormProvider extends ChangeNotifier {
     @required String dateOfBirth,
     @required String civilStatus,
   }) {
-    form.name = name;
-    form.surname = surname;
-    form.dni = dni;
+    // form.name = name;
+    // form.surname = surname;
+    // form.dni = dni;
     form.email = email;
     form.personalPhone = personalPhone;
     form.personalAddress = personalAddress;
@@ -48,7 +49,8 @@ class FormProvider extends ChangeNotifier {
     form.workAddress = workAddress;
     form.workCity = workCity;
     form.month = month;
-    await _db.collection('forms').add(form.toJson());
+    // await _db.collection('forms').add(form.toJson());
+    await _db.collection('forms').doc(FirebaseAuth.instance.currentUser.uid).set(form.toJson());
   }
 
   void prevStep() {
