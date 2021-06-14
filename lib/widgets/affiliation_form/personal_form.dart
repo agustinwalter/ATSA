@@ -25,7 +25,7 @@ class _PersonalFormState extends State<PersonalForm> {
   void initState() {
     super.initState();
     final AtsaForm form = Provider.of<FormProvider>(context, listen: false).form;
-    _emailC.text = form.email;
+    // _emailC.text = form.email;
     _phoneC.text = form.personalPhone.toString() == 'null' ? '' : form.personalPhone.toString();
     _addressC.text = form.personalAddress;
     _cityC.text = form.personalCity;
@@ -36,7 +36,7 @@ class _PersonalFormState extends State<PersonalForm> {
   @override
   void dispose() {
     super.dispose();
-    _emailC.dispose();
+    // _emailC.dispose();
     _phoneC.dispose();
     _addressC.dispose();
     _cityC.dispose();
@@ -45,7 +45,8 @@ class _PersonalFormState extends State<PersonalForm> {
   }
 
   void _setPersonalData() {
-    if (_emailC.text.isEmpty ||
+    if (
+    // _emailC.text.isEmpty ||
         _phoneC.text.isEmpty ||
         _addressC.text.isEmpty ||
         _cityC.text.isEmpty ||
@@ -55,7 +56,7 @@ class _PersonalFormState extends State<PersonalForm> {
       return;
     }
     Provider.of<FormProvider>(context, listen: false).setPersonalData(
-      email: _emailC.text,
+      // email: _emailC.text,
       personalPhone: int.tryParse(_phoneC.text),
       personalAddress: _addressC.text,
       personalCity: _cityC.text,
@@ -69,15 +70,15 @@ class _PersonalFormState extends State<PersonalForm> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const SizedBox(height: 20),
-        CustomTextField(
-          textInputAction: TextInputAction.next,
-          labelText: 'Email',
-          icon: Icons.mail_outline,
-          keyboardType: TextInputType.emailAddress,
-          focusColor: Colors.blue,
-          controller: _emailC,
-        ),
+        // const SizedBox(height: 20),
+        // CustomTextField(
+        //   textInputAction: TextInputAction.next,
+        //   labelText: 'Email',
+        //   icon: Icons.mail_outline,
+        //   keyboardType: TextInputType.emailAddress,
+        //   focusColor: Colors.blue,
+        //   controller: _emailC,
+        // ),
         const SizedBox(height: 20),
         CustomTextField(
           textInputAction: TextInputAction.next,

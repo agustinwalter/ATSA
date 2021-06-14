@@ -180,4 +180,22 @@ class UserProvider extends ChangeNotifier {
   }
 
   String _status() => user.status.toString().split('.').last;
+
+  // Convenience method to manually update the user Status
+  // This should be replaced with server-side logic
+  Future<void> updateUserStatus(LoginStatus newStatus) async {
+    // Update user status.
+    user.status = newStatus;
+
+    // Get the String form of the status to update on Firebase
+    final String newStr = newStatus.toString();
+    String statusStr = newStr.substring(newStr.indexOf('.'),newStr.length);
+    print('Status string: $statusStr');
+
+    await _db.doc('users-v2/${user.uid}').update(<String, Object>{
+      'status': statusStr,
+    });
+    notifyListeners();
+  }
+
 }
