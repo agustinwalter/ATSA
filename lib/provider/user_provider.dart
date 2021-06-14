@@ -76,41 +76,6 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _getUserData(User firebaseUser) async {
-    user.uid = firebaseUser.uid;
-    user.emailVerified = firebaseUser.emailVerified;
-    if (!user.emailVerified) {
-      user.status = LoginStatus.EMAIL_NOT_VERIFIED;
-      notifyListeners();
-      return;
-    }
-    final DocumentSnapshot<Map<String, dynamic>> doc = await _db.doc('users-v2/${user.uid}').get();
-    if (doc.exists) {
-      user = user.updatedFromJson(doc.data());
-      switch (doc.get('status') as String) {
-        case 'SEND_USER_DATA':
-          user.status = LoginStatus.SEND_USER_DATA;
-          break;
-        case 'PENDING_VERIFICATION':
-          user.status = LoginStatus.PENDING_VERIFICATION;
-          break;
-        case 'BLOCKED':
-          user.status = LoginStatus.BLOCKED;
-          break;
-        case 'NOT_AFFILIATED':
-          user.status = LoginStatus.NOT_AFFILIATED;
-          break;
-        case 'AFFILIATED':
-          user.status = LoginStatus.AFFILIATED;
-          break;
-        case 'AFFILIATION_FORM_PENDING':
-          user.status = LoginStatus.AFFILIATION_FORM_PENDING;
-          break;
-      }
-    }
-    notifyListeners();
-  }
-
   Future<void> checkEmailVerification() async {
     await _auth.currentUser.reload();
     if (_auth.currentUser.emailVerified) {
@@ -172,5 +137,65 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void goToCreateAccount() {
+    user.status = LoginStatus.CREATE_ACCOUNT_FOR_AFFILIATION;
+    notifyListeners();
+  }
+
+  void setEmail(String email) => user.email = email;
+
+  Future<void> _getUserData(User firebaseUser) async {
+    user.uid = firebaseUser.uid;
+    user.emailVerified = firebaseUser.emailVerified;
+    if (!user.emailVerified) {
+      user.status = LoginStatus.EMAIL_NOT_VERIFIED;
+      notifyListeners();
+      return;
+    }
+    final DocumentSnapshot<Map<String, dynamic>> doc = await _db.doc('users-v2/${user.uid}').get();
+    if (doc.exists) {
+      user = user.updatedFromJson(doc.data());
+      switch (doc.get('status') as String) {
+        case 'SEND_USER_DATA':
+          user.status = LoginStatus.SEND_USER_DATA;
+          break;
+        case 'PENDING_VERIFICATION':
+          user.status = LoginStatus.PENDING_VERIFICATION;
+          break;
+        case 'BLOCKED':
+          user.status = LoginStatus.BLOCKED;
+          break;
+        case 'NOT_AFFILIATED':
+          user.status = LoginStatus.NOT_AFFILIATED;
+          break;
+        case 'AFFILIATED':
+          user.status = LoginStatus.AFFILIATED;
+          break;
+        case 'AFFILIATION_FORM_PENDING':
+          user.status = LoginStatus.AFFILIATION_FORM_PENDING;
+          break;
+      }
+    }
+    notifyListeners();
+  }
+
   String _status() => user.status.toString().split('.').last;
+
+  // TODO(Martin): This should be replaced with server-side logic
+  /// Convenience method to manually update the user Status
+  Future<void> updateUserStatus(LoginStatus newStatus) async {
+    // Update user status.
+    user.status = newStatus;
+
+    // Get the String form of the status to update on Firebase
+    final String newStr = newStatus.toString();
+    String statusStr = newStr.substring(newStr.indexOf('.'),newStr.length);
+    print('Status string: $statusStr');
+
+    await _db.doc('users-v2/${user.uid}').update(<String, Object>{
+      'status': statusStr,
+    });
+    notifyListeners();
+  }
+
 }

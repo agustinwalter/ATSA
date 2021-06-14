@@ -1,6 +1,7 @@
 import 'package:atsa/models/business.dart';
 import 'package:atsa/provider/user_provider.dart';
 import 'package:atsa/screens/details_screen.dart';
+import 'package:atsa/widgets/general/wsp_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'credential_screen.dart';
@@ -15,6 +16,7 @@ class BusinessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       appBar: AppBar(
         title: const Text(
           'Descuentos para vos',
@@ -58,14 +60,23 @@ class BusinessScreen extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.push<void>(
-          context,
-          MaterialPageRoute<void>(
-            builder: (_) => const CredentialScreen(),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          const WspButton(),
+          Padding(
+            padding: const EdgeInsets.only(right: 32),
+            child: FloatingActionButton.extended(
+              onPressed: () => Navigator.push<void>(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => const CredentialScreen(),
+                ),
+              ),
+              label: const Text('Ver mi credencial'),
+            ),
           ),
-        ),
-        label: const Text('Ver mi credencial'),
+        ],
       ),
     );
   }
