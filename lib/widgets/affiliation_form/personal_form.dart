@@ -30,9 +30,9 @@ class _PersonalFormState extends State<PersonalForm> {
     final AtsaForm form = Provider.of<FormProvider>(context, listen: false).form;
     _nameC.text = form.name;
     _surnameC.text = form.surname;
-    _dniC.text = form.dni.toString();
+    _dniC.text = form.dni.toString() == 'null' ? '' : form.dni.toString();
     _emailC.text = form.email;
-    _phoneC.text = form.personalPhone.toString();
+    _phoneC.text = form.personalPhone.toString() == 'null' ? '' : form.personalPhone.toString();
     _addressC.text = form.personalAddress;
     _cityC.text = form.personalCity;
     _dateOfBirthC.text = form.dateOfBirth;
