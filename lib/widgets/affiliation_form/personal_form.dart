@@ -14,9 +14,6 @@ class PersonalForm extends StatefulWidget {
 }
 
 class _PersonalFormState extends State<PersonalForm> {
-  // final TextEditingController _nameC = TextEditingController();
-  // final TextEditingController _surnameC = TextEditingController();
-  // final TextEditingController _dniC = TextEditingController();
   final TextEditingController _emailC = TextEditingController();
   final TextEditingController _phoneC = TextEditingController();
   final TextEditingController _addressC = TextEditingController();
@@ -28,9 +25,6 @@ class _PersonalFormState extends State<PersonalForm> {
   void initState() {
     super.initState();
     final AtsaForm form = Provider.of<FormProvider>(context, listen: false).form;
-    // _nameC.text = form.name;
-    // _surnameC.text = form.surname;
-    // _dniC.text = form.dni.toString() == 'null' ? '' : form.dni.toString();
     _emailC.text = form.email;
     _phoneC.text = form.personalPhone.toString() == 'null' ? '' : form.personalPhone.toString();
     _addressC.text = form.personalAddress;
@@ -42,9 +36,6 @@ class _PersonalFormState extends State<PersonalForm> {
   @override
   void dispose() {
     super.dispose();
-    // _nameC.dispose();
-    // _surnameC.dispose();
-    // _dniC.dispose();
     _emailC.dispose();
     _phoneC.dispose();
     _addressC.dispose();
@@ -54,11 +45,7 @@ class _PersonalFormState extends State<PersonalForm> {
   }
 
   void _setPersonalData() {
-    if (
-        // _nameC.text.isEmpty ||
-        // _surnameC.text.isEmpty ||
-        // _dniC.text.isEmpty ||
-        _emailC.text.isEmpty ||
+    if (_emailC.text.isEmpty ||
         _phoneC.text.isEmpty ||
         _addressC.text.isEmpty ||
         _cityC.text.isEmpty ||
@@ -68,9 +55,6 @@ class _PersonalFormState extends State<PersonalForm> {
       return;
     }
     Provider.of<FormProvider>(context, listen: false).setPersonalData(
-      // name: _nameC.text,
-      // surname: _surnameC.text,
-      // dni: int.tryParse(_dniC.text),
       email: _emailC.text,
       personalPhone: int.tryParse(_phoneC.text),
       personalAddress: _addressC.text,
@@ -85,36 +69,6 @@ class _PersonalFormState extends State<PersonalForm> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        // const SizedBox(height: 20),
-        // CustomTextField(
-        //   textInputAction: TextInputAction.next,
-        //   labelText: 'Nombre(s)',
-        //   icon: Icons.person_outline,
-        //   keyboardType: TextInputType.name,
-        //   focusColor: Colors.blue,
-        //   controller: _nameC,
-        // ),
-        // const SizedBox(height: 20),
-        // CustomTextField(
-        //   textInputAction: TextInputAction.next,
-        //   labelText: 'Apellido(s)',
-        //   icon: Icons.person_outline,
-        //   keyboardType: TextInputType.name,
-        //   focusColor: Colors.blue,
-        //   controller: _surnameC,
-        // ),
-        // const SizedBox(height: 20),
-        // CustomTextField(
-        //   textInputAction: TextInputAction.next,
-        //   labelText: 'Número de DNI',
-        //   icon: Icons.contact_mail_outlined,
-        //   keyboardType: TextInputType.number,
-        //   focusColor: Colors.blue,
-        //   controller: _dniC,
-        //   inputFormatters: <TextInputFormatter>[
-        //     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-        //   ],
-        // ),
         const SizedBox(height: 20),
         CustomTextField(
           textInputAction: TextInputAction.next,
