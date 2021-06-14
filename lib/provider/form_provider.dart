@@ -1,5 +1,4 @@
 import 'package:atsa/models/atsa_form.dart';
-import 'package:atsa/provider/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -12,14 +11,12 @@ class FormProvider extends ChangeNotifier {
   int formStep = 0;
 
   void setPersonalData({
-    // @required String email,
     @required int personalPhone,
     @required String personalAddress,
     @required String personalCity,
     @required String dateOfBirth,
     @required String civilStatus,
   }) {
-    // form.email = email;
     form.personalPhone = personalPhone;
     form.personalAddress = personalAddress;
     form.personalCity = personalCity;

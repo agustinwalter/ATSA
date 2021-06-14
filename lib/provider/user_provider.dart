@@ -181,8 +181,8 @@ class UserProvider extends ChangeNotifier {
 
   String _status() => user.status.toString().split('.').last;
 
-  // Convenience method to manually update the user Status
-  // This should be replaced with server-side logic
+  // TODO This should be replaced with server-side logic
+  /// Convenience method to manually update the user Status
   Future<void> updateUserStatus(LoginStatus newStatus) async {
     // Update user status.
     user.status = newStatus;
