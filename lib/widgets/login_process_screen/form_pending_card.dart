@@ -11,8 +11,9 @@ class FormPendingCard extends StatelessWidget {
         const TitleCard(title: 'Afiliación pendiente'),
         const SizedBox(height: 16),
         const MessageCard(
-            message:
-                'Recibimos tu formulario y estamos revisando tus datos. Pronto te contactaremos por email informándote si se aprobó tu afiliación o no.'),
+          message:
+              'Recibimos tu formulario y estamos revisando tus datos. Pronto te contactaremos por email informándote si se aprobó tu afiliación o no.',
+        ),
         const SizedBox(height: 8),
         TextButton(onPressed: () {}, child: const Text('Cerrar sesión')),
       ],

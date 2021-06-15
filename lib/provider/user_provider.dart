@@ -22,51 +22,43 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  /// Check if there is a user created with this [email].
-  Future<void> checkEmail(String email) async {
-    final List<String> firebaseUser = await _auth.fetchSignInMethodsForEmail(email);
-    if (firebaseUser.isEmpty) {
-      user.status = LoginStatus.EMAIL_ENTERED_NOT_USER;
-    } else {
-      user.status = LoginStatus.EMAIL_ENTERED_YES_USER;
-    }
-    user.email = email;
-    notifyListeners();
-  }
-
-  Future<void> signUp(String password) async {
+  Future<void> signUp({
+    @required String email,
+    @required String password,
+    @required String name,
+    @required String surname,
+    @required String dni,
+  }) async {
     // Create user.
-    final UserCredential credential =
-        await _auth.createUserWithEmailAndPassword(email: user.email, password: password);
+    final UserCredential credential = await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    await credential.user.sendEmailVerification();
     // Update local user data.
     user.uid = credential.user.uid;
+    user.email = email;
+    user.name = name;
+    user.surname = surname;
+    user.dni = dni;
+    user.createdAt = Timestamp.now();
     user.emailVerified = credential.user.emailVerified;
     user.status = LoginStatus.EMAIL_NOT_VERIFIED;
-    // Get version 1 user data.
-    final QuerySnapshot<Map<String, dynamic>> query =
-        await _db.collection('users').where('email', isEqualTo: user.email).get();
-    if (query.size == 1) {
-      // Create user doc with version 1 data.
-      user.dni = query.docs[0].get('dni') as String;
-      user.createdAt = query.docs[0].get('createdAt') as Timestamp;
-      await _db.doc('users-v2/${user.uid}').set(<String, dynamic>{
-        'dni': user.dni,
-        'createdAt': user.createdAt,
-      });
-    } else {
-      // Create user doc without data.
-      user.createdAt = Timestamp.now();
-      await _db.doc('users-v2/${user.uid}').set(<String, dynamic>{
-        'createdAt': user.createdAt,
-      });
-    }
-    await credential.user.sendEmailVerification();
+    // Create a user in DB
+    await _db.doc('users-v2/${user.uid}').set(<String, dynamic>{
+      'name': user.name,
+      'surname': user.surname,
+      'dni': user.dni,
+      'createdAt': user.createdAt,
+    });
     notifyListeners();
   }
 
-  Future<void> signIn(String password) async {
-    final UserCredential credential =
-        await _auth.signInWithEmailAndPassword(email: user.email, password: password);
+  Future<void> signIn(String email, String password) async {
+    final UserCredential credential = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
     await _getUserData(credential.user);
   }
 
@@ -79,11 +71,40 @@ class UserProvider extends ChangeNotifier {
   Future<void> checkEmailVerification() async {
     await _auth.currentUser.reload();
     if (_auth.currentUser.emailVerified) {
+      print(_auth.currentUser.emailVerified);
       user.emailVerified = true;
-      user.status = LoginStatus.SEND_USER_DATA;
-      await _db.doc('users-v2/${user.uid}').update(<String, Object>{
-        'status': _status(),
-      });
+      // Try to get user data for verion 1.
+      final QuerySnapshot<Map<String, dynamic>> query =
+          await _db.collection('users').where('email', isEqualTo: user.email).get();
+      if (query.size == 1) {
+        // The user had already used the app, I charge him the revision status that he already had.
+        user.createdAt = query.docs[0].get('createdAt') as Timestamp;
+        final String statusV1 = query.docs[0].get('status') as String;
+        switch (statusV1) {
+          case 'Afiliado':
+            user.status = LoginStatus.AFFILIATED;
+            break;
+          case 'Bloqueado':
+            user.status = LoginStatus.BLOCKED;
+            break;
+          case 'No afiliado':
+            user.status = LoginStatus.NOT_AFFILIATED;
+            break;
+          case 'Verificación pendiente':
+            user.status = LoginStatus.PENDING_VERIFICATION;
+            break;
+        }
+        await _db.doc('users-v2/${user.uid}').update(<String, dynamic>{
+          'createdAt': user.createdAt,
+          'status': _status(),
+        });
+      } else {
+        // It is the first time the user uses the app, I put the pending verification status.
+        user.status = LoginStatus.PENDING_VERIFICATION;
+        await _db.doc('users-v2/${user.uid}').update(<String, dynamic>{
+          'status': _status(),
+        });
+      }
       notifyListeners();
     }
   }
@@ -101,48 +122,10 @@ class UserProvider extends ChangeNotifier {
     await _auth.currentUser.sendEmailVerification();
   }
 
-  Future<void> updateInfo(String name, String surname, String dni) async {
-    // Get previous verification status, if it had it.
-    final QuerySnapshot<Map<String, dynamic>> query =
-        await _db.collection('users').where('email', isEqualTo: user.email).get();
-    if (query.size == 1) {
-      final String prevStatus = query.docs[0].get('status') as String;
-      switch (prevStatus) {
-        case 'Afiliado':
-          user.status = LoginStatus.AFFILIATED;
-          break;
-        case 'Bloqueado':
-          user.status = LoginStatus.BLOCKED;
-          break;
-        case 'No afiliado':
-          user.status = LoginStatus.NOT_AFFILIATED;
-          break;
-        case 'Verificación pendiente':
-          user.status = LoginStatus.PENDING_VERIFICATION;
-          break;
-      }
-    } else {
-      user.status = LoginStatus.PENDING_VERIFICATION;
-    }
-    // Update user info.
-    user.name = name;
-    user.surname = surname;
-    user.dni = dni;
-    await _db.doc('users-v2/${user.uid}').update(<String, Object>{
-      'name': name,
-      'surname': surname,
-      'dni': dni,
-      'status': _status(),
-    });
-    notifyListeners();
-  }
-
   void goToCreateAccount() {
-    user.status = LoginStatus.CREATE_ACCOUNT_FOR_AFFILIATION;
+    user.status = LoginStatus.CREATE_ACCOUNT;
     notifyListeners();
   }
-
-  void setEmail(String email) => user.email = email;
 
   Future<void> _getUserData(User firebaseUser) async {
     user.uid = firebaseUser.uid;
@@ -156,9 +139,6 @@ class UserProvider extends ChangeNotifier {
     if (doc.exists) {
       user = user.updatedFromJson(doc.data());
       switch (doc.get('status') as String) {
-        case 'SEND_USER_DATA':
-          user.status = LoginStatus.SEND_USER_DATA;
-          break;
         case 'PENDING_VERIFICATION':
           user.status = LoginStatus.PENDING_VERIFICATION;
           break;
@@ -189,7 +169,7 @@ class UserProvider extends ChangeNotifier {
 
     // Get the String form of the status to update on Firebase
     final String newStr = newStatus.toString();
-    String statusStr = newStr.substring(newStr.indexOf('.'),newStr.length);
+    String statusStr = newStr.substring(newStr.indexOf('.'), newStr.length);
     print('Status string: $statusStr');
 
     await _db.doc('users-v2/${user.uid}').update(<String, Object>{
@@ -197,5 +177,4 @@ class UserProvider extends ChangeNotifier {
     });
     notifyListeners();
   }
-
 }
