@@ -14,19 +14,37 @@ class SignUpCard extends StatefulWidget {
 }
 
 class _SignUpCardState extends State<SignUpCard> {
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passOneController = TextEditingController();
   final TextEditingController _passTwoController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _surnameController = TextEditingController();
+  final TextEditingController _dniController = TextEditingController();
+
   bool _loading = false;
 
   @override
   void dispose() {
     super.dispose();
+    _emailController.dispose();
     _passOneController.dispose();
     _passTwoController.dispose();
+    _nameController.dispose();
+    _surnameController.dispose();
+    _dniController.dispose();
   }
 
   Future<void> _signUp() async {
-    if (_passOneController.text.isEmpty || _passTwoController.text.isEmpty || _loading) {
+    if (_loading) {
+      return;
+    }
+    if (_emailController.text.isEmpty ||
+        _passOneController.text.isEmpty ||
+        _passTwoController.text.isEmpty ||
+        _nameController.text.isEmpty ||
+        _surnameController.text.isEmpty ||
+        _dniController.text.isEmpty) {
+      showToast('Todos los campos son obligatorios');
       return;
     }
     if (_passOneController.text.length < 8 || _passOneController.text.length > 16) {
@@ -39,9 +57,19 @@ class _SignUpCardState extends State<SignUpCard> {
     }
     setState(() => _loading = true);
     try {
-      await Provider.of<UserProvider>(context, listen: false).signUp(_passOneController.text);
+      await Provider.of<UserProvider>(context, listen: false).signUp(
+        email: _emailController.text,
+        password: _passOneController.text,
+        name: _nameController.text,
+        surname: _surnameController.text,
+        dni: _dniController.text,
+      );
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
+      if (e.code == 'email-already-in-use') {
+        showToast('Este email ya está registrado');
+      } else if (e.code == 'invalid-email') {
+        showToast('El email no es válido');
+      } else if (e.code == 'weak-password') {
         showToast('La contraseña es insegura, intenta combinar letras y números');
       }
     } catch (e) {
@@ -58,22 +86,29 @@ class _SignUpCardState extends State<SignUpCard> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const TitleCard(title: 'Nueva contraseña'),
+        const TitleCard(title: 'Registrate'),
         const SizedBox(height: 16),
-        const MessageCard(message: 'Crea una nueva contraseña, la usarás para acceder a la app'),
-        const SizedBox(height: 8),
         CustomTextField(
           textInputAction: TextInputAction.next,
-          labelText: 'Nueva contraseña',
-          icon: Icons.vpn_key,
-          keyboardType: TextInputType.visiblePassword,
+          labelText: 'Email',
+          icon: Icons.email_outlined,
+          keyboardType: TextInputType.emailAddress,
           focusColor: Colors.blue,
-          obscureText: true,
-          controller: _passOneController,
+          controller: _emailController,
         ),
         const SizedBox(height: 8),
         CustomTextField(
-          textInputAction: TextInputAction.done,
+          textInputAction: TextInputAction.next,
+          labelText: 'Contraseña',
+          icon: Icons.vpn_key,
+          keyboardType: TextInputType.visiblePassword,
+          focusColor: Colors.blue,
+          controller: _passOneController,
+          obscureText: true,
+        ),
+        const SizedBox(height: 8),
+        CustomTextField(
+          textInputAction: TextInputAction.next,
           labelText: 'Repite la contraseña',
           icon: Icons.vpn_key,
           keyboardType: TextInputType.visiblePassword,
@@ -82,9 +117,40 @@ class _SignUpCardState extends State<SignUpCard> {
           controller: _passTwoController,
         ),
         const SizedBox(height: 8),
+        CustomTextField(
+          textInputAction: TextInputAction.next,
+          labelText: 'Nombre',
+          icon: Icons.person_outline,
+          keyboardType: TextInputType.name,
+          focusColor: Colors.blue,
+          controller: _nameController,
+        ),
+        const SizedBox(height: 8),
+        CustomTextField(
+          textInputAction: TextInputAction.next,
+          labelText: 'Apellido',
+          icon: Icons.person_outline,
+          keyboardType: TextInputType.name,
+          focusColor: Colors.blue,
+          controller: _surnameController,
+        ),
+        const SizedBox(height: 8),
+        CustomTextField(
+          textInputAction: TextInputAction.done,
+          labelText: 'DNI',
+          icon: Icons.contact_mail_outlined,
+          keyboardType: TextInputType.number,
+          focusColor: Colors.blue,
+          controller: _dniController,
+        ),
+        const SizedBox(height: 8),
+        const Text(
+          'Si ya habías usado la versión anterior de ATSA Santa cruz, recuperaremos tus datos de afiliación automáticamente.',
+        ),
+        const SizedBox(height: 8),
         PrimaryButton(
           onPressed: _signUp,
-          text: 'Guardar contraseña',
+          text: 'Registrarme',
           loading: _loading,
         ),
       ],
