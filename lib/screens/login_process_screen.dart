@@ -1,12 +1,10 @@
 import 'package:atsa/helpers/login_status.dart';
 import 'package:atsa/provider/user_provider.dart';
 import 'package:atsa/widgets/general/wsp_button.dart';
-import 'package:atsa/widgets/login_process_screen/create_account_for_affiliation_card.dart';
 import 'package:atsa/widgets/login_process_screen/email_not_verified_card.dart';
 import 'package:atsa/widgets/login_process_screen/form_pending_card.dart';
 import 'package:atsa/widgets/login_process_screen/not_affiliated_card.dart';
 import 'package:atsa/widgets/login_process_screen/pending_verification_card.dart';
-import 'package:atsa/widgets/login_process_screen/signin_card.dart';
 import 'package:atsa/widgets/login_process_screen/signup_card.dart';
 import 'package:atsa/widgets/login_process_screen/update_info_card.dart';
 import 'package:atsa/widgets/login_process_screen/user_blocked_card.dart';
@@ -47,10 +45,8 @@ class LoginProcessScreen extends StatelessWidget {
                           switch (userProvider.user.status) {
                             case LoginStatus.NOT_LOGGED:
                               return const WelcomeCard();
-                            case LoginStatus.EMAIL_ENTERED_NOT_USER:
+                            case LoginStatus.CREATE_ACCOUNT:
                               return const SignUpCard();
-                            case LoginStatus.EMAIL_ENTERED_YES_USER:
-                              return const SignInCard();
                             case LoginStatus.EMAIL_NOT_VERIFIED:
                               return const EmailNotVerified();
                             case LoginStatus.SEND_USER_DATA:
@@ -63,8 +59,6 @@ class LoginProcessScreen extends StatelessWidget {
                               return const NotAffiliatedCard();
                             case LoginStatus.AFFILIATION_FORM_PENDING:
                               return const FormPendingCard();
-                            case LoginStatus.CREATE_ACCOUNT_FOR_AFFILIATION:
-                              return const CreateAccForAffiliationCard();
                             default:
                               return const SizedBox.shrink();
                           }
