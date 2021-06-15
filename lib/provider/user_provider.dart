@@ -59,7 +59,6 @@ class UserProvider extends ChangeNotifier {
       email: email,
       password: password,
     );
-    // TODO(agustinwalter): Review this method.
     await _getUserData(credential.user);
   }
 
@@ -123,49 +122,10 @@ class UserProvider extends ChangeNotifier {
     await _auth.currentUser.sendEmailVerification();
   }
 
-  // TODO(agustinwalter): Maybe this feature will be removed.
-  Future<void> updateInfo(String name, String surname, String dni) async {
-    // Get previous verification status, if it had it.
-    final QuerySnapshot<Map<String, dynamic>> query =
-        await _db.collection('users').where('email', isEqualTo: user.email).get();
-    if (query.size == 1) {
-      final String prevStatus = query.docs[0].get('status') as String;
-      switch (prevStatus) {
-        case 'Afiliado':
-          user.status = LoginStatus.AFFILIATED;
-          break;
-        case 'Bloqueado':
-          user.status = LoginStatus.BLOCKED;
-          break;
-        case 'No afiliado':
-          user.status = LoginStatus.NOT_AFFILIATED;
-          break;
-        case 'Verificación pendiente':
-          user.status = LoginStatus.PENDING_VERIFICATION;
-          break;
-      }
-    } else {
-      user.status = LoginStatus.PENDING_VERIFICATION;
-    }
-    // Update user info.
-    user.name = name;
-    user.surname = surname;
-    user.dni = dni;
-    await _db.doc('users-v2/${user.uid}').update(<String, Object>{
-      'name': name,
-      'surname': surname,
-      'dni': dni,
-      'status': _status(),
-    });
-    notifyListeners();
-  }
-
   void goToCreateAccount() {
     user.status = LoginStatus.CREATE_ACCOUNT;
     notifyListeners();
   }
-
-  void setEmail(String email) => user.email = email;
 
   Future<void> _getUserData(User firebaseUser) async {
     user.uid = firebaseUser.uid;
