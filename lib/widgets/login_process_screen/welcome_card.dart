@@ -83,6 +83,7 @@ class _WelcomeCardState extends State<WelcomeCard> {
           keyboardType: TextInputType.visiblePassword,
           focusColor: Colors.blue,
           controller: _passController,
+          obscureText: true,
         ),
         const SizedBox(height: 8),
         PrimaryButton(

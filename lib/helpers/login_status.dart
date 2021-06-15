@@ -18,11 +18,6 @@ enum LoginStatus {
   /// This value is not saved in the database, but is obtained from the [emailVerified] parameter of the Firebase [user] object.
   EMAIL_NOT_VERIFIED,
 
-  /// The user has logged into the app. You have not yet submitted your personal data.
-  /// A screen should be displayed for you to load your data.
-  /// This value is saved in the database.
-  SEND_USER_DATA,
-
   /// The user has sent his data, an administrator must verify if he is affiliated or not.
   /// A message should be displayed informing the status of his verification.
   /// This value is saved in the database.
