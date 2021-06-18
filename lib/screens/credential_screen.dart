@@ -14,7 +14,7 @@ class CredentialScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: Consumer<UserProvider>(
-        builder: (BuildContext _, UserProvider userProvider, Widget __) {
+        builder: (_, UserProvider userProvider, __) {
           if (userProvider.user.status == LoginStatus.AFFILIATED) {
             return Column(
               children: <Widget>[
@@ -61,19 +61,9 @@ class CredentialScreen extends StatelessWidget {
                           padding: const EdgeInsets.all(16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              const Text(
-                                'Usuario',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Text(
-                                '',
-                                // Provider.of<UserProvider>(context, listen: false)
-                                //     .user
-                                //     .status
-                                //     .toUpperCase(),
-                                style: const TextStyle(fontSize: 24),
-                              ),
+                            children: const <Widget>[
+                              Text('Usuario', style: TextStyle(fontSize: 16)),
+                              Text('AFILIADO', style: TextStyle(fontSize: 24)),
                             ],
                           ),
                         ),
@@ -130,7 +120,7 @@ class CredentialScreen extends StatelessWidget {
                                 style: TextStyle(fontSize: 16),
                               ),
                               Text(
-                                Provider.of<UserProvider>(context, listen: false).user.dni,
+                                userProvider.user.dni,
                                 style: const TextStyle(fontSize: 24),
                               ),
                             ],
