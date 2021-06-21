@@ -49,6 +49,7 @@ class UserProvider extends ChangeNotifier {
     await _db.doc('users-v2/${user.uid}').set(<String, dynamic>{
       'name': user.name,
       'surname': user.surname,
+      'email': user.email,
       'dni': user.dni,
       'createdAt': user.createdAt,
     });
