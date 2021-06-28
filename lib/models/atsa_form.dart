@@ -1,6 +1,5 @@
 class AtsaForm {
   AtsaForm({
-    this.email,
     this.personalPhone,
     this.personalAddress,
     this.personalCity,
@@ -15,7 +14,6 @@ class AtsaForm {
     this.month,
   });
 
-  String email;
   int personalPhone;
   String personalAddress;
   String personalCity;
@@ -30,7 +28,6 @@ class AtsaForm {
   String month;
 
   Map<String, Object> toJson() => <String, Object>{
-        'email': email,
         'personalPhone': personalPhone,
         'personalAddress': personalAddress,
         'personalCity': personalCity,

@@ -5,6 +5,7 @@ import 'package:atsa/provider/user_provider.dart';
 import 'package:atsa/widgets/general/custom_text_field.dart';
 import 'package:atsa/widgets/general/primary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class WorkingForm extends StatefulWidget {
@@ -45,8 +46,7 @@ class _WorkingFormState extends State<WorkingForm> {
       showToast('Todos los campos son obligatorios');
       return;
     }
-
-    Provider.of<FormProvider>(context, listen: false).sendForm(
+    await Provider.of<FormProvider>(context, listen: false).sendForm(
       work: _workC.text,
       profession: _professionC.text,
       file: _fileC.text,
@@ -54,11 +54,10 @@ class _WorkingFormState extends State<WorkingForm> {
       workAddress: _addressC.text,
       workCity: _cityC.text,
       month: _monthC.text,
-    ).then((_) {
-      // TODO(Martin): Update account state to AFFILIATION_FORM_PENDING from Firebase
-      Provider.of<UserProvider>(context, listen: false).updateUserStatus(LoginStatus.AFFILIATION_FORM_PENDING);
-    })
-    .then((_) => Navigator.pop(context));
+    );
+    await Provider.of<UserProvider>(context, listen: false)
+        .updateUserStatus(LoginStatus.AFFILIATION_FORM_PENDING);
+    Navigator.pop(context);
   }
 
   void _prevStep() => Provider.of<FormProvider>(context, listen: false).prevStep();
@@ -110,6 +109,9 @@ class _WorkingFormState extends State<WorkingForm> {
           keyboardType: TextInputType.phone,
           focusColor: Colors.blue,
           controller: _phoneC,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          ],
         ),
         const SizedBox(height: 20),
         CustomTextField(

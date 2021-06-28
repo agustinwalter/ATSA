@@ -10,6 +10,7 @@ class UserProvider extends ChangeNotifier {
   AtsaUser user = AtsaUser(status: LoginStatus.NOT_LOGGED);
   List<Business> business = <Business>[];
   bool loading = false;
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>> _listenUserChanges;
 
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -64,6 +65,7 @@ class UserProvider extends ChangeNotifier {
 
   Future<void> signOut() async {
     await _auth.signOut();
+    _listenUserChanges.cancel();
     user = AtsaUser(status: LoginStatus.NOT_LOGGED);
     notifyListeners();
   }
@@ -71,11 +73,10 @@ class UserProvider extends ChangeNotifier {
   Future<void> checkEmailVerification() async {
     await _auth.currentUser.reload();
     if (_auth.currentUser.emailVerified) {
-      print(_auth.currentUser.emailVerified);
       user.emailVerified = true;
       // Try to get user data for verion 1.
-      final QuerySnapshot<Map<String, dynamic>> query =
-          await _db.collection('users').where('email', isEqualTo: user.email).get();
+      // ignore: always_specify_types
+      final query = await _db.collection('users').where('email', isEqualTo: user.email).get();
       if (query.size == 1) {
         // The user had already used the app, I charge him the revision status that he already had.
         user.createdAt = query.docs[0].get('createdAt') as Timestamp;
@@ -97,12 +98,14 @@ class UserProvider extends ChangeNotifier {
         await _db.doc('users-v2/${user.uid}').update(<String, dynamic>{
           'createdAt': user.createdAt,
           'status': _status(),
+          'email': user.email,
         });
       } else {
         // It is the first time the user uses the app, I put the pending verification status.
         user.status = LoginStatus.PENDING_VERIFICATION;
         await _db.doc('users-v2/${user.uid}').update(<String, dynamic>{
           'status': _status(),
+          'email': user.email,
         });
       }
       notifyListeners();
@@ -110,8 +113,8 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<void> getBusiness() async {
-    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-        await _db.collection('business').get();
+    // ignore: always_specify_types
+    final querySnapshot = await _db.collection('business').get();
     business.clear();
     for (final QueryDocumentSnapshot<Map<String, dynamic>> doc in querySnapshot.docs) {
       business.add(Business.fromJson(doc.data()));
@@ -135,45 +138,39 @@ class UserProvider extends ChangeNotifier {
       notifyListeners();
       return;
     }
-    final DocumentSnapshot<Map<String, dynamic>> doc = await _db.doc('users-v2/${user.uid}').get();
-    if (doc.exists) {
-      user = user.updatedFromJson(doc.data());
-      switch (doc.get('status') as String) {
-        case 'PENDING_VERIFICATION':
-          user.status = LoginStatus.PENDING_VERIFICATION;
-          break;
-        case 'BLOCKED':
-          user.status = LoginStatus.BLOCKED;
-          break;
-        case 'NOT_AFFILIATED':
-          user.status = LoginStatus.NOT_AFFILIATED;
-          break;
-        case 'AFFILIATED':
-          user.status = LoginStatus.AFFILIATED;
-          break;
-        case 'AFFILIATION_FORM_PENDING':
-          user.status = LoginStatus.AFFILIATION_FORM_PENDING;
-          break;
+    final DocumentReference<Map<String, dynamic>> userDoc = _db.doc('users-v2/${user.uid}');
+    _listenUserChanges = userDoc.snapshots().listen((DocumentSnapshot<Map<String, dynamic>> doc) {
+      if (doc.exists) {
+        user = user.updatedFromJson(doc.data());
+        switch (doc.get('status') as String) {
+          case 'PENDING_VERIFICATION':
+            user.status = LoginStatus.PENDING_VERIFICATION;
+            break;
+          case 'BLOCKED':
+            user.status = LoginStatus.BLOCKED;
+            break;
+          case 'NOT_AFFILIATED':
+            user.status = LoginStatus.NOT_AFFILIATED;
+            break;
+          case 'AFFILIATED':
+            user.status = LoginStatus.AFFILIATED;
+            break;
+          case 'AFFILIATION_FORM_PENDING':
+            user.status = LoginStatus.AFFILIATION_FORM_PENDING;
+            break;
+        }
       }
-    }
-    notifyListeners();
+      notifyListeners();
+    });
   }
 
   String _status() => user.status.toString().split('.').last;
 
-  // TODO(Martin): This should be replaced with server-side logic
-  /// Convenience method to manually update the user Status
+  /// After submitting the form, put the user's status as pending affiliation.
   Future<void> updateUserStatus(LoginStatus newStatus) async {
-    // Update user status.
     user.status = newStatus;
-
-    // Get the String form of the status to update on Firebase
-    final String newStr = newStatus.toString();
-    String statusStr = newStr.substring(newStr.indexOf('.'), newStr.length);
-    print('Status string: $statusStr');
-
     await _db.doc('users-v2/${user.uid}').update(<String, Object>{
-      'status': statusStr,
+      'status': _status(),
     });
     notifyListeners();
   }

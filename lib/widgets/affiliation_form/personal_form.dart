@@ -14,7 +14,6 @@ class PersonalForm extends StatefulWidget {
 }
 
 class _PersonalFormState extends State<PersonalForm> {
-  final TextEditingController _emailC = TextEditingController();
   final TextEditingController _phoneC = TextEditingController();
   final TextEditingController _addressC = TextEditingController();
   final TextEditingController _cityC = TextEditingController();
@@ -74,7 +73,7 @@ class _PersonalFormState extends State<PersonalForm> {
           focusColor: Colors.blue,
           controller: _phoneC,
           inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
           ],
         ),
         const SizedBox(height: 20),

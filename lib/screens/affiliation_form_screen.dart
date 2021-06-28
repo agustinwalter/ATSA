@@ -13,7 +13,6 @@ class AffiliationFormScreen extends StatelessWidget {
       body: SafeArea(
         child: Consumer<FormProvider>(
           builder: (_, FormProvider formProvider, __) {
-
             final int step = formProvider.formStep;
 
             return ListView(
