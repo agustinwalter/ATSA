@@ -1,13 +1,6 @@
 import 'package:flutter/foundation.dart';
 
 class Business {
-  final String name;
-  final String type;
-  final String address;
-  final String image;
-  final String discount;
-  final String details;
-
   Business({
     @required this.name,
     @required this.type,
@@ -24,4 +17,11 @@ class Business {
         image = json['image'] as String,
         discount = json['discount'] as String,
         details = json['details'] as String;
+
+  final String name;
+  final String type;
+  final String address;
+  final String image;
+  final String discount;
+  final String details;
 }
