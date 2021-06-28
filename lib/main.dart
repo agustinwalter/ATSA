@@ -1,5 +1,3 @@
-import 'package:atsa/helpers/login_status.dart';
-import 'package:atsa/provider/form_provider.dart';
 import 'package:atsa/provider/user_provider.dart';
 import 'package:atsa/screens/business_screen.dart';
 import 'package:atsa/screens/login_process_screen.dart';
@@ -14,54 +12,55 @@ void main() {
     MultiProvider(
       providers: <SingleChildWidget>[
         ChangeNotifierProvider<UserProvider>(create: (BuildContext _) => UserProvider()),
-        ChangeNotifierProvider<FormProvider>(create: (BuildContext _) => FormProvider()),
       ],
-      child: const ATSA(),
+      child: ATSA(),
     ),
   );
 }
 
 class ATSA extends StatefulWidget {
-  const ATSA({Key key}) : super(key: key);
   @override
   _ATSAState createState() => _ATSAState();
 }
 
 class _ATSAState extends State<ATSA> {
-  Future<void> _init() async {
-    await Firebase.initializeApp();
-    await Provider.of<UserProvider>(context, listen: false).initUser();
-  }
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'ATSA Santa Cruz',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: FutureBuilder<void>(
-        future: _init(),
-        builder: (_, AsyncSnapshot<void> snapshot) {
+      home: FutureBuilder(
+        future: _initialization,
+        builder: (context, snapshot) {
           // Error.
           if (snapshot.hasError) {
-            return const Scaffold(body: Center(child: Text('Algo salió mal')));
+            return Scaffold(
+              body: Center(
+                child: Text('Algo salió mal'),
+              ),
+            );
           }
           // Login or business.
           if (snapshot.connectionState == ConnectionState.done) {
             return Consumer<UserProvider>(
-              builder: (_, UserProvider userProvider, __) {
-                if (userProvider.user.status == LoginStatus.AFFILIATED) {
-                  return const BusinessScreen();
+              builder: (BuildContext _, UserProvider userProvider, Widget __) {
+                if (userProvider.atsaUser != null) {
+                  if (userProvider.atsaUser.status == 'Afiliado') {
+                    return BusinessScreen();
+                  }
                 }
-                return const LoginProcessScreen();
+                return LoginProcessScreen();
               },
             );
           }
           // Loading.
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+          return Scaffold(body: Center(child: CircularProgressIndicator()));
         },
       ),
     );

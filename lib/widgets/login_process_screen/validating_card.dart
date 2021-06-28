@@ -2,7 +2,11 @@ import 'package:atsa/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class NotAffiliatedCard extends StatelessWidget {
+class ValidatingCard extends StatelessWidget {
+  final String email;
+
+  const ValidatingCard({Key key, @required this.email}) : super(key: key);
+
   Future<void> _logout(BuildContext context) async {
     await Provider.of<UserProvider>(context, listen: false).logout();
   }
@@ -14,7 +18,7 @@ class NotAffiliatedCard extends StatelessWidget {
       child: Column(
         children: <Widget>[
           const Text(
-            'Usuario no afiliado',
+            'Validando identidad',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 22,
@@ -22,11 +26,24 @@ class NotAffiliatedCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 28),
-          Text(
-            'No sos afiliado de ATSA Santa Cruz por lo que no podés acceder a los descuentos que ofrecemos.',
-            style: TextStyle(
-              fontSize: 15,
-              height: 1.3,
+          RichText(
+            text: TextSpan(
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.black87,
+                height: 1.3,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text:
+                      'Estamos verificando que seas afiliado de ATSA Santa Cruz, en los próximos días recibirás un correo en tu cuenta ',
+                ),
+                TextSpan(
+                  text: email,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(text: '.'),
+              ],
             ),
           ),
           const SizedBox(height: 18),

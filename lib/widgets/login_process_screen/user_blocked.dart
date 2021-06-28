@@ -2,7 +2,7 @@ import 'package:atsa/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class NotAffiliatedCard extends StatelessWidget {
+class UserBlocked extends StatelessWidget {
   Future<void> _logout(BuildContext context) async {
     await Provider.of<UserProvider>(context, listen: false).logout();
   }
@@ -14,7 +14,7 @@ class NotAffiliatedCard extends StatelessWidget {
       child: Column(
         children: <Widget>[
           const Text(
-            'Usuario no afiliado',
+            'Usuario bloqueado',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 22,
@@ -23,7 +23,7 @@ class NotAffiliatedCard extends StatelessWidget {
           ),
           const SizedBox(height: 28),
           Text(
-            'No sos afiliado de ATSA Santa Cruz por lo que no podés acceder a los descuentos que ofrecemos.',
+            'Por algún motivo este usuario se encuentra bloqueado, comunicate con un administrador para solucionar el problema.',
             style: TextStyle(
               fontSize: 15,
               height: 1.3,
