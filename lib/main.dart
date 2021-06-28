@@ -36,6 +36,7 @@ class _ATSAState extends State<ATSA> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'ATSA Santa Cruz',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -51,7 +52,7 @@ class _ATSAState extends State<ATSA> {
           // Login or business.
           if (snapshot.connectionState == ConnectionState.done) {
             return Consumer<UserProvider>(
-              builder: (BuildContext _, UserProvider userProvider, Widget __) {
+              builder: (_, UserProvider userProvider, __) {
                 if (userProvider.user.status == LoginStatus.AFFILIATED) {
                   return const BusinessScreen();
                 }

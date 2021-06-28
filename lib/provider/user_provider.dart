@@ -49,7 +49,6 @@ class UserProvider extends ChangeNotifier {
     await _db.doc('users-v2/${user.uid}').set(<String, dynamic>{
       'name': user.name,
       'surname': user.surname,
-      'email': user.email,
       'dni': user.dni,
       'createdAt': user.createdAt,
     });
@@ -99,12 +98,14 @@ class UserProvider extends ChangeNotifier {
         await _db.doc('users-v2/${user.uid}').update(<String, dynamic>{
           'createdAt': user.createdAt,
           'status': _status(),
+          'email': user.email,
         });
       } else {
         // It is the first time the user uses the app, I put the pending verification status.
         user.status = LoginStatus.PENDING_VERIFICATION;
         await _db.doc('users-v2/${user.uid}').update(<String, dynamic>{
           'status': _status(),
+          'email': user.email,
         });
       }
       notifyListeners();

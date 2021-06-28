@@ -12,6 +12,7 @@ class WspButton extends StatelessWidget {
         await canLaunch(_url) ? await launch(_url) : print('Could not launch WhatsApp');
       },
       child: const FaIcon(FontAwesomeIcons.whatsapp),
+      heroTag: 'wsp',
       backgroundColor: const Color(0xFF00BB2D),
     );
   }
